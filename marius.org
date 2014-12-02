@@ -43,6 +43,10 @@
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 #+end_src
 
+** testing on ruby mode
+#+BEGIN_SRC emacs-lisp
+(require 'ruby-mode)
+#+END_SRC
 ** Yasnippet
    I keep revisiting this one. [[http://blog.binchen.org/?p%3D553][Bin Chen]] suggests binding completion
    to a different key combo than =TAB=, which may make sense. Oh, and
@@ -61,12 +65,23 @@
    and rebind to =C-c y e= (mnemonic Yas Expand).
 
 #+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/elpa/org-bullets")
 (global-set-key (kbd "C-c y e") 'yas-expand)
 (global-set-key (kbd "C-c y i") 'yas-insert-snippet)
 (define-key yas-minor-mode-map [(tab)] nil)
 #+END_SRC
 
-
+** Switching windows
+This allows us to switch windows by number
+#+BEGIN_SRC emacs-lisp
+(require 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
+#+END_SRC
+** SubWord
+Make a workd boundery at camal cas
+#+BEGIN_SRC emacs-lisp
+(global-subword-mode t)
+#+END_SRC
 ** Auto-fill in org-mode
    I always want auto-fill-mode on in my org buffers.
 
@@ -263,7 +278,6 @@
 #+begin_src emacs-lisp
 (require 'smalltalk-mode)
 #+end_src
-
 ** YAML mode
 
    YAML is ... should we say *picky*? ... to edit by hand. Indentation
@@ -395,7 +409,6 @@
 
    Sometimes I need to use a lighter theme, eg. when using
    htmlize. I'm adding a function for switching to this and back.
-
 ** Run tests from Emacs
    This is currently a wish list
   - [X] find .rvmrc
@@ -431,6 +444,28 @@
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+END_SRC
+
+** Mobile Org
+in order for mobile org to work a few things need to be added
+#+BEGIN_SRC emacs-lisp
+(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+(find-file "~/org/gtd.org")
+#+END_SRC
+*** Org-agenda setup
+   Which org-files are included in the agenda?
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files '("~/org/gtd.org"))
+#+END_SRC
+
+   Let's bind =C-c a= to =org-agenda=
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c a") 'org-agenda)
+#+END_SRC
+
+   Key bindings when using =org-schedule= (the little calendar thingie):
+   - =M-+= / =M--=: next/previous day
+   - =+[0-9]=: _n_ days from today
+   - =M-n= / =M-p=: next/previous week
 
 ** Speed commands in org
    With speed commands enabled, I can enter single-letter commands
@@ -537,7 +572,7 @@
    - Offlineimap for imap
    - msmtp to send mail.
 
-#+BEGIN_SRC emacs-lisp
+/// no longer used #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (concat dotfiles-dir "contrib/mu4e"))
   (require 'mu4e)
   (setq mu4e-get-mail-command "offlineimap")
@@ -621,12 +656,12 @@
             (setq message-sendmail-extra-arguments (list '"-a" account))))))
   (setq message-sendmail-envelope-from 'header)
   (add-hook 'message-send-mail-hook 'choose-msmtp-account)
-#+END_SRC
+// #+END_SRC
 *** Dynamic sender addresses
     When replying to an email I want to use the address I received
     this message to as the sender of the reply. This is fairly trivial:
 
-#+BEGIN_SRC emacs-lisp
+// disalbed #+BEGIN_SRC emacs-lisp
   (add-hook 'mu4e-compose-pre-hook
             (defun my-set-from-address ()
               "Set the From address based on the To address of the original."
@@ -645,10 +680,10 @@
                            ((mu4e-message-contact-field-matches msg :to "zmalltalker@zmalltalker.com")
                             "zmalltalker@zmalltalker.com")
                            (t "marius@gitorious.com")))))))
-#+END_SRC
+// #+END_SRC
 *** Bookmarks
 
-#+BEGIN_SRC emacs-lisp
+// not currently used #+BEGIN_SRC emacs-lisp
   (add-to-list 'mu4e-bookmarks
                 '("maildir:/Gitorious/inbox OR maildir:/Shortcut/inbox OR maildir:/Gmail/inbox flag:unread" "Today's news" ?z))
   (add-to-list 'mu4e-bookmarks
@@ -658,7 +693,7 @@
                '("flag:flagged" "Flagged messages" ?f))
 
 
-#+END_SRC
+// #+END_SRC
 *** Attaching files from dired
     Wouldn't it be awesome to be able to send files from dired using
     your mail client?
@@ -682,7 +717,7 @@
             (push (buffer-name buffer) buffers))))
       (nreverse buffers)))
 
-  (setq gnus-dired-mail-mode 'mu4e-user-agent)
+;; updated after removal of mu4e  (setq gnus-dired-mail-mode 'mu4e-user-agent)
   (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 #+END_SRC
 
@@ -694,24 +729,24 @@
     automatically. Simply set =mu4e-update-interval= to the number of
     seconds between each check. Let's go with every 10 minutes.
 
-#+BEGIN_SRC emacs-lisp
+// no longer used #+BEGIN_SRC emacs-lisp
 (setq mu4e-update-interval 600)
-#+END_SRC
+//#+END_SRC
 
 *** Attachments
     Since any decent operating system mounts /tmp as tmpfs and
     sometimes it's unpractical to lose downloaded attachments, I want
     to use ~/Downloads to store attachments from email.
 
-#+BEGIN_SRC emacs-lisp
+// mu4e removed #+BEGIN_SRC emacs-lisp
 (setq mu4e-attachment-dir "~/Downloads")
-#+END_SRC
+// #+END_SRC
 *** One click mail checking
     My buddy [[http://cjohansen.no/][Christian]] has an awesome setup where =C-x M= a window
     configuration is set up with mu4e (no other windows), which is
     killed when pressing =q=.
 
-#+BEGIN_SRC emacs-lisp
+// mu4e removed #+BEGIN_SRC emacs-lisp
   (defun mu4e-up-to-date-status ()
     (interactive)
     (window-configuration-to-register :mu4e-fullscreen)
@@ -725,29 +760,29 @@
 
   (define-key mu4e-main-mode-map (kbd "q") 'mu4e-quit-session)
   (global-set-key (kbd "C-x M") 'mu4e-up-to-date-status)
-#+END_SRC
+//#+END_SRC
 
 *** Org integration
     In order to use org "minor" mode when composing (awesome!) and store links to messages:
     - to a message from message view
     - to a query in headers view
-#+BEGIN_SRC emacs-lisp
+// #+BEGIN_SRC emacs-lisp
 (require 'org-mu4e)
-#+END_SRC
+// #+END_SRC
 
     To edit messages in org-mode, enter =C-c o= to enable org-mode inside the message.
-#+BEGIN_SRC emacs-lisp
+// #+BEGIN_SRC emacs-lisp
 (define-key mu4e-compose-mode-map (kbd "C-c o") 'org-mu4e-compose-org-mode)
-#+END_SRC
+// #+END_SRC
 
 *** Encryption in email
     Enable =epa-mail-mode= when composing messages:
 
-#+BEGIN_SRC
+// #+BEGIN_SRC
 (add-hook 'mu4e-compose-mode-hook
    (defun my-setup-epa-hook ()
      (epa-mail-mode)))
-#+END_SRC
+// #+END_SRC
 
     Now, when composing a message, use:
     * =C-c C-e s= to sign a message.
@@ -755,31 +790,16 @@
 
     Let's enable it in =mu4e-view-mode= as well:
 
-#+BEGIN_SRC emacs-lisp
+// #+BEGIN_SRC emacs-lisp
 (add-hook 'mu4e-view-mode-hook
   (defun my-view-mode-hook ()
    (epa-mail-mode)))
-#+END_SRC
+// #+END_SRC
 
     Now, when viewing a message, enter:
     * =C-c C-e v= to verify a signature
     * =C-c C-e d= to decrypt a message
 
-** Org-agenda setup
-   Which org-files are included in the agenda?
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-files '("~/Dropbox/dotfiles/orgfiles/today.org"))
-#+END_SRC
-
-   Let's bind =C-c a= to =org-agenda=
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c a") 'org-agenda)
-#+END_SRC
-
-   Key bindings when using =org-schedule= (the little calendar thingie):
-   - =M-+= / =M--=: next/previous day
-   - =+[0-9]=: _n_ days from today
-   - =M-n= / =M-p=: next/previous week
 ** Switch between org buffers
    Org-mode has this really nice facility for switching between org
    buffers; being all buffers in =org-agenda-files= (and other open
@@ -991,14 +1011,14 @@ e src/omg/core.clj
     Switch to mail, by default start mu4e.
     Bound to =C-c p m= (Perspective Mail)
 
-#+BEGIN_SRC emacs-lisp
+// #+BEGIN_SRC emacs-lisp
     (defun custom-persp/mail ()
       (interactive)
       (custom-persp "@email"
                     (mu4e)))
 
   (global-set-key (kbd "C-c p m") 'custom-persp/mail)
-#+END_SRC
+// #+END_SRC
 
 *** Gitorious
     Switch to Gitorious, by default open =app/models/user.rb=.
