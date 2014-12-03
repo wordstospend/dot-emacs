@@ -47,6 +47,29 @@
 #+BEGIN_SRC emacs-lisp
 (require 'ruby-mode)
 #+END_SRC
+** javascript via js2-mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(setq js2-highlight-level 3)
+
+;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
+;; add any symbols to a buffer-local var of acceptable global vars
+;; Note that we also support the "symbol: true" way of specifying names via a hack (remove any ":true"
+;; to make it look like a plain decl, and any ':false' are left behind so they'll effectively be ignored as
+ ;; you can;t have a symbol called "someName:false"
+(add-hook 'js2-post-parse-callbacks
+          (lambda ()
+            (when (> (buffer-size) 0)
+              (let ((btext (replace-regexp-in-string
+                            ": *true" " "
+                            (replace-regexp-in-string "[\n\t ]+" " " (buffer-substring-no-properties 1 (buffer-size)) t t))))
+                (mapc (apply-partially 'add-to-list 'js2-additional-externs)
+                      (split-string
+                       (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
+                       " *, *" t))
+                ))))
+#+END_SRC
 ** Yasnippet
    I keep revisiting this one. [[http://blog.binchen.org/?p%3D553][Bin Chen]] suggests binding completion
    to a different key combo than =TAB=, which may make sense. Oh, and
@@ -65,7 +88,6 @@
    and rebind to =C-c y e= (mnemonic Yas Expand).
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/elpa/org-bullets")
 (global-set-key (kbd "C-c y e") 'yas-expand)
 (global-set-key (kbd "C-c y i") 'yas-insert-snippet)
 (define-key yas-minor-mode-map [(tab)] nil)
@@ -441,11 +463,39 @@ Make a workd boundery at camal cas
 ** Use bullets for headings in org
 
 #+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/elpa/org-bullets")
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+END_SRC
 
-** Mobile Org
+** Org mode
+set up todo states
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keywords
+  '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELLED")))
+#+END_SRC
+setting tag list
+#+BEGIN_SRC emacs-lisp
+(setq org-tag-alist '(;; location tags
+                      (:startgroup . nil)
+                      ("@work" . ?w) ("@home" . ?h)
+                      (:endgroup . nil)
+                      (:startgroup . nil)
+                      ("@computer" . ?c)
+                      ("@onthego" . ?o)
+                      (:endgroup . nil)
+                      ("@tel" . ?t)
+                      ;; owner client
+                      ("4say" . ?s) ("4personal" . ?p)))
+#+END_SRC
+Refiling C-c C-w
+      ("~/org/gtd.org" :maxlevel . 4)
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 2)
+                           (org-agenda-files :maxlevel . 4)
+                           ))
+#+END_SRC
+*** Mobile Org
 in order for mobile org to work a few things need to be added
 #+BEGIN_SRC emacs-lisp
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
@@ -968,9 +1018,10 @@ e src/omg/core.clj
           (message "Indented buffer.")))))
   (global-set-key (kbd "<backtab>") 'indent-region-or-buffer)
 #+END_SRC
-** Perspectives
+** TODO Perspectives
    Set up perspectives
-
+ custom-persp-kbd is not working because I don't have a <XF86HomePage> key
+ plus I'm not sure i even want this feature
 #+BEGIN_SRC emacs-lisp
 (persp-mode)
 #+END_SRC
