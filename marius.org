@@ -489,12 +489,43 @@ setting tag list
                       ("4say" . ?s) ("4personal" . ?p)))
 #+END_SRC
 Refiling C-c C-w
-      ("~/org/gtd.org" :maxlevel . 4)
+
 #+BEGIN_SRC emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 2)
                            (org-agenda-files :maxlevel . 4)
                            ))
+
 #+END_SRC
+
+this is fully experimental I haven't got this complete block to work it seems to be causing problems
+#+BEGIN_SRC emacs-lisp
+; Use full outline paths for refile targets - we file directly with IDO
+(setq org-refile-use-outline-path t)
+
+; Targets complete directly with IDO
+(setq org-outline-path-complete-in-steps nil)
+
+; Use IDO for both buffer and file completion and ido-everywhere to t
+(setq org-completion-use-ido t)
+#+END_SRC
+ everything down here is suspect
+(setq ido-everywhere t)
+(setq ido-max-directory-size 100000)
+(ido-mode (quote both))
+; Use the current window when visiting files and buffers with ido
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
+; Use the current window for indirect buffer display
+(setq org-indirect-buffer-display 'current-window)
+
+;;;; Refile settings
+; Exclude DONE state tasks from refile targets
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+
 *** Mobile Org
 in order for mobile org to work a few things need to be added
 #+BEGIN_SRC emacs-lisp
