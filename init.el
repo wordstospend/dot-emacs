@@ -4,7 +4,7 @@
 ;; embedded in literate Org-mode files.
 
 ;; Load up Org Mode and (now included) Org Babel for elisp embedded in Org Mode files
-(add-to-list 'load-path "~/.emacs.d/src/org-mode/lisp")
+(package-initialize)
 (require 'org-install)
 (require 'org)
 (setq dotfiles-dir (file-name-directory (or (buffer-file-name) load-file-name)))
