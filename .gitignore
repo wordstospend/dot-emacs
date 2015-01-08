@@ -13,3 +13,4 @@ session.*
 url
 *elc
 contrib/multiple-cursors/*.elc
+\.org-id-locations
