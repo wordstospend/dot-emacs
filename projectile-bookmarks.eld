@@ -1,0 +1,1 @@
+("~/Ghost/" "~/expEmacs/dot-emacs/" "/scpc:delivery:/home/nfair/pigeon" "~/delivery/" "~/opsconfig-new/" "~/Dove/" "~/phoenix/" "~/pigeon/" "~/tempest/" "~/cyclamenjs/" "~/ad-validation/" "~/maestro/" "~/testnpm/" "~/appnexus/")

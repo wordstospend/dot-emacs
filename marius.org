@@ -104,6 +104,16 @@ Make a workd boundery at camal cas
 #+BEGIN_SRC emacs-lisp
 (global-subword-mode t)
 #+END_SRC
+** auto save
+Save auto save #somefile# to a system temp dir
+code stollen strait off auto save module page
+#+BEGIN_SRC emacs-lisp
+    (setq backup-directory-alist
+          `((".*" . ,temporary-file-directory)))
+    (setq auto-save-file-name-transforms
+          `((".*" ,temporary-file-directory t)))
+#+END_SRC
+
 ** Auto-fill in org-mode
    I always want auto-fill-mode on in my org buffers.
 
