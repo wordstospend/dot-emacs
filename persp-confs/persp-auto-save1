@@ -1,1 +1,0 @@
-((def-persp nil ((def-buffer "marius.org" "/Users/nfair/expEmacs/dot-emacs/marius.org" org-mode) (def-buffer "from-mobile.org" "/Users/nfair/org/from-mobile.org" org-mode) (def-buffer "gtd.org" "/Users/nfair/org/gtd.org" org-mode) (def-buffer "notes.org" "/Users/nfair/org/notes.org" org-mode)) (def-wconf nil) (def-params nil)))
