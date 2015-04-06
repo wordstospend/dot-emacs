@@ -51,6 +51,8 @@
 #+BEGIN_SRC emacs-lisp
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook (lambda () (progn
+    (set-variable 'indent-tabs-mode nil))))
 (setq js2-highlight-level 3)
 
 ;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
