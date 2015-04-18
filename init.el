@@ -8,8 +8,9 @@
 (require 'org-install)
 (require 'org)
 (setq dotfiles-dir (file-name-directory (or (buffer-file-name) load-file-name)))
+(setq bootstrap-dir (expand-file-name "bootstrap" dotfiles-dir))
+(add-to-list 'load-path bootstrap-dir)
 
-(add-to-list 'load-path dotfiles-dir)
 (let* ((org-dir (expand-file-name
                  "lisp" (expand-file-name
                          "org-mode" (expand-file-name
@@ -41,8 +42,8 @@ code blocks which can be tangled"
 
 (add-to-list 'load-path zmalltalker-extras-dir)
 
-;; load up all literate org-mode files in this directory
-(mapc #'org-babel-load-file (directory-files dotfiles-dir t "\\.org$"))
+;; load up all literate org-mode files in the bootstrap directory
+(mapc #'org-babel-load-file (directory-files bootstrap-dir t "\\.org$"))
 
 
 ;;; init.el ends here
