@@ -1371,5 +1371,5 @@ my_method(foo,
    Let's use groovy-mode for Gradle build files.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.gradle$" . groovy-mode))
+;;(add-to-list 'auto-mode-alist '("\\.gradle$" . groovy-mode))
 #+END_SRC
