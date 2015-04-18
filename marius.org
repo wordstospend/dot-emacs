@@ -342,6 +342,7 @@ code stollen strait off auto save module page
 #+begin_src emacs-lisp
 (require 'magit)
 (add-to-list 'load-path "/home/marius/.emacs.d/extras")
+(setq magit-last-seen-setup-instructions "1.4.0")
 #+end_src
 
    Magnar (or Christian?) shared some customizations for Magit
