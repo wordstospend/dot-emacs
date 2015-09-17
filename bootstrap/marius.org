@@ -444,6 +444,7 @@ code stollen strait off auto save module page
 
    Sometimes I need to use a lighter theme, eg. when using
    htmlize. I'm adding a function for switching to this and back.
+*** Fonts
 ** Run tests from Emacs
    This is currently a wish list
   - [X] find .rvmrc
