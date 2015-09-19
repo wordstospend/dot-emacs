@@ -14,3 +14,8 @@ url
 *elc
 contrib/multiple-cursors/*.elc
 \.org-id-locations
+ido.last
+bookmarks
+projectile-bookmarks.eld
+recentf
+ac-comphist.dat
