@@ -488,6 +488,10 @@ set up todo states
 (setq org-todo-keywords
   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELLED")))
 #+END_SRC
+
+#+RESULTS:
+| sequence | TODO | IN-PROGRESS | WAITING |   |   | DONE | CANCELLED |
+
 setting tag list
 #+BEGIN_SRC emacs-lisp
 (setq org-tag-alist '(;; location tags
@@ -502,6 +506,9 @@ setting tag list
                       ;; owner client
                       ("4say" . ?s) ("4personal" . ?p)))
 #+END_SRC
+
+#+RESULTS:
+
 Refiling C-c C-w
 
 #+BEGIN_SRC emacs-lisp
@@ -516,13 +523,64 @@ add capture
 
 (setq org-default-notes-file (concat org-directory "/inbox.org"))
 (define-key global-map "\C-cc" 'org-capture)
+(defun org-find-heading-in-datetree ()
+  (goto-char (point-min))
+  (if (re-search-forward (format org-complex-heading-regexp-format
+    (regexp-quote (format-time-string
+      (car org-time-stamp-formats) (org-current-time)))) nil t)
+    (goto-char (point-at-bol))))
+
+(defun org-find-heading-in-datetree2 ()
+  (goto-char (point-min))
+  (re-search-forward (format org-complex-heading-regexp-format
+    (regexp-quote (format-time-string
+      (car org-time-stamp-formats) (org-current-time)))) nil t)
+  (backward-char)
+)
+
+(defun org-find-heading-in-datetree3 ()
+  (goto-char (point-min))
+  (if (not (re-search-forward (format org-complex-heading-regexp-format
+    (regexp-quote (format-time-string
+      (car org-time-stamp-formats) (org-current-time)))) nil t))
+   (progn
+     (org-first-headline-recenter)
+     (goto-char (point-at-bol))
+     (org-insert-heading)
+     (insert (format-time-string
+      (car org-time-stamp-formats) (org-current-time))))
+   )
+)
+
+(defun org-get-target-headline (&optional prompt)
+  "Prompt for a location in an org file and jump to it.
+
+This is for promping for refile targets when doing captures."
+    (let* ((target (save-excursion
+                     (org-refile-get-location prompt nil nil t)))
+           (file (nth 1 target))
+           (pos (nth 3 target))
+           )
+    (with-current-buffer (find-file-noselect file)
+        (goto-char pos)
+        (org-end-of-subtree)
+        (org-return)
+    )))
 
 (setq org-capture-templates
-'(("t" "Todo" entry (file+headline (concat org-directory "inbox.org") "Tasks")
+'(("t" "Todo" entry (file+headline (concat org-directory "/inbox.org") "Tasks")
              "* TODO %?\n  %i\n  %a")
+("m" "Daily morning work entry" entry (file+function (concat org-directory "/morning.org") org-find-heading-in-datetree3)
+             "* TODO %?\n %a")
 ("j" "Journal" entry (file+datetree "~/org/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
 #+END_SRC
+
+#+RESULTS:
+| t | Todo                     | entry | (file+headline (concat org-directory /inbox.org) Tasks)                           | * TODO %?\n  %i\n  %a           |
+| m | Daily morning work entry | entry | (file+function (concat org-directory /morning.org) org-find-heading-in-datetree3) | * TODO %?                       |
+| f | f work entry             | entry | (file+function (concat org-directory /morning.org) org-get-target-headline)       | * TODO %?                       |
+| j | Journal                  | entry | (file+datetree ~/org/journal.org)                                                 | * %?\nEntered on %U\n  %i\n  %a |
 
 
 this is fully experimental I haven't got this complete block to work it seems to be causing problems
