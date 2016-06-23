@@ -1220,6 +1220,31 @@ GET https://gitorious.org/gitorious/mainline.xml
 #+BEGIN_SRC emacs-lisp
 (projectile-global-mode)
 #+END_SRC
+** php experimental
+this is completely experimental
+#+BEGIN_SRC emacs-lisp
+(require 'php-mode)
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+#+END_SRC
+** Python experimental
+This is just to add newline at the end of files
+#+BEGIN_SRC emacs-lisp
+(add-hook 'python-mode-hook
+   (lambda ()
+     (set (make-local-variable 'require-final-newline) t)))
+#+END_SRC
+** brows mark ring
+This is an attempt to use a pop over for mark ring
+#+BEGIN_SRC emacs-lisp
+(require 'show-marks)
+;;;;  I recommend also binding the commands to global keys, e.g:
+;;
+(global-set-key (kbd "M-]") 'forward-mark)
+(global-set-key (kbd "M-[") 'backward-mark)
+(global-set-key (kbd "M-p") 'show-marks)
+#+END_SRC
 * My Emacs installation
   My OS (Fedora 17) ships with Emacs 24 (doesn't yours?). Sadly this
   version doesn't work 100% with all of the orgmode features, either
