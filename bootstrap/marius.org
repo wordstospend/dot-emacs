@@ -125,73 +125,6 @@ code stollen strait off auto save module page
 (add-hook 'org-mode-hook
 (lambda() (auto-fill-mode)))
 #+END_SRC
-** Ido
-    Ido improves all kind of minibuffer activities:
-    - find-file
-    - switch-buffer
-
-    with case-insensitivity and all kinds of wonderful things. Let's
-    load it up:
-
-#+begin_src emacs-lisp
-(load-library "ido")
-(ido-mode)
-#+end_src
-
-*** Jump to symbol support
-    Jump to a symbol (function, class etc.) with completion.
-    No textmate required
-
-#+begin_src emacs-lisp
-(defun ido-goto-symbol (&optional symbol-list)
-      "Refresh imenu and jump to a place in the buffer using Ido."
-      (interactive)
-      (unless (featurep 'imenu)
-        (require 'imenu nil t))
-      (cond
-       ((not symbol-list)
-        (let ((ido-mode ido-mode)
-              (ido-enable-flex-matching
-               (if (boundp 'ido-enable-flex-matching)
-                   ido-enable-flex-matching t))
-              name-and-pos symbol-names position)
-          (unless ido-mode
-            (ido-mode 1)
-            (setq ido-enable-flex-matching t))
-          (while (progn
-                   (imenu--cleanup)
-                   (setq imenu--index-alist nil)
-                   (ido-goto-symbol (imenu--make-index-alist))
-                   (setq selected-symbol
-                         (ido-completing-read "Symbol? " symbol-names))
-                   (string= (car imenu--rescan-item) selected-symbol)))
-          (unless (and (boundp 'mark-active) mark-active)
-            (push-mark nil t nil))
-          (setq position (cdr (assoc selected-symbol name-and-pos)))
-          (cond
-           ((overlayp position)
-            (goto-char (overlay-start position)))
-           (t
-            (goto-char position)))))
-       ((listp symbol-list)
-        (dolist (symbol symbol-list)
-          (let (name position)
-            (cond
-             ((and (listp symbol) (imenu--subalist-p symbol))
-              (ido-goto-symbol symbol))
-             ((listp symbol)
-              (setq name (car symbol))
-              (setq position (cdr symbol)))
-             ((stringp symbol)
-              (setq name symbol)
-              (setq position
-                    (get-text-property 1 'org-imenu-marker symbol))))
-            (unless (or (null position) (null name)
-                        (string= (car imenu--rescan-item) name))
-              (add-to-list 'symbol-names name)
-              (add-to-list 'name-and-pos (cons name position))))))))
-#+end_src
-
 ** Emacs server mode
    Let's support emacsclient. For that to work, we'll need to start the server.
    Unless, of course, it's already running
@@ -372,47 +305,6 @@ code stollen strait off auto save module page
               ((((class color) (min-colors 16) (background dark))
                  (:foreground "LightSalmon" :strike-through t)))))
 #+END_SRC
-** Recent files
-   Support open-recent-file. This needs some work.
-
-#+begin_src emacs-lisp
-(require 'recentf)
-(recentf-mode 1)
-#+end_src
-
-   I just copied something awesome off the Internet! It's a function
-   that does an ido-complete of the recently open files.
-
-#+BEGIN_SRC emacs-lisp
-  (defun recentf-interactive-complete ()
-    "find a file in the recently open file using ido for completion"
-    (interactive)
-    (let* ((all-files recentf-list)
-           (file-assoc-list (mapcar (lambda (x) (cons (file-name-nondirectory x) x)) all-files))
-           (filename-list (remove-duplicates (mapcar 'car file-assoc-list) :test 'string=))
-           (ido-make-buffer-list-hook
-            (lambda ()
-              (setq ido-temp-list filename-list)))
-           (filename (ido-read-buffer "Find Recent File: "))
-           (result-list (delq nil (mapcar (lambda (x) (if (string= (car x) filename) (cdr x))) file-assoc-list)))
-           (result-length (length result-list)))
-      (find-file
-       (cond
-        ((= result-length 0) filename)
-        ((= result-length 1) (car result-list))
-        ( t
-          (let ( (ido-make-buffer-list-hook
-                  (lambda ()
-                    (setq ido-temp-list result-list))))
-            (ido-read-buffer (format "%d matches:" result-length))))
-        ))))
-#+END_SRC
-
-   Now let's map this baby to C-x C-g:
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-g") 'recentf-interactive-complete)
-#+END_SRC
 ** Theme
    Emacs 24 has built-in theming support.
 *** Custom themes
@@ -587,33 +479,12 @@ This is for promping for refile targets when doing captures."
 
 this is fully experimental I haven't got this complete block to work it seems to be causing problems
 #+BEGIN_SRC emacs-lisp
-; Use full outline paths for refile targets - we file directly with IDO
 (setq org-refile-use-outline-path t)
 
-; Targets complete directly with IDO
 (setq org-outline-path-complete-in-steps nil)
 
-; Use IDO for both buffer and file completion and ido-everywhere to t
-(setq org-completion-use-ido t)
+
 #+END_SRC
- everything down here is suspect
-(setq ido-everywhere t)
-(setq ido-max-directory-size 100000)
-(ido-mode (quote both))
-; Use the current window when visiting files and buffers with ido
-(setq ido-default-file-method 'selected-window)
-(setq ido-default-buffer-method 'selected-window)
-; Use the current window for indirect buffer display
-(setq org-indirect-buffer-display 'current-window)
-
-;;;; Refile settings
-; Exclude DONE state tasks from refile targets
-(defun bh/verify-refile-target ()
-  "Exclude todo keywords with a done state from refile targets"
-  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-
-(setq org-refile-target-verify-function 'bh/verify-refile-target)
-
 *** Mobile Org
 in order for mobile org to work a few things need to be added
 #+BEGIN_SRC emacs-lisp
