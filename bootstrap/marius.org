@@ -73,6 +73,22 @@
                        " *, *" t))
                 ))))
 #+END_SRC
+** java
+to use the java integration we need eclipse
+#+BEGIN_SRC emacs-lisp
+(require 'eclimd)
+(require 'eclim)
+
+(setq eclim-auto-save t
+        eclim-executable (or (executable-find "eclim") "/Applications/Eclipse.app/Contents/Eclipse/eclim")
+        eclimd-executable (or (executable-find "eclimd") "/Applications/Eclipse.app/Contents/Eclipse/eclimd")
+        eclimd-wait-for-process nil
+        eclimd-default-workspace "~/Documents/workspace/"
+        help-at-pt-display-when-idle t
+        help-at-pt-timer-delay 0.1
+)
+(add-hook 'java-mode-hook 'eclim-mode)
+#+END_SRC
 ** Yasnippet
    I keep revisiting this one. [[http://blog.binchen.org/?p%3D553][Bin Chen]] suggests binding completion
    to a different key combo than =TAB=, which may make sense. Oh, and
