@@ -76,18 +76,26 @@
 ** java
 to use the java integration we need eclipse
 #+BEGIN_SRC emacs-lisp
-(require 'eclimd)
-(require 'eclim)
+;(setq debug-on-error t)
+(add-to-list 'exec-path "/usr/local/bin")
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+;(when (memq window-system '(mac ns))
+;   (exec-path-from-shell-initialize))
+(require 'ensime)
 
-(setq eclim-auto-save t
-        eclim-executable (or (executable-find "eclim") "/Applications/Eclipse.app/Contents/Eclipse/eclim")
-        eclimd-executable (or (executable-find "eclimd") "/Applications/Eclipse.app/Contents/Eclipse/eclimd")
-        eclimd-wait-for-process nil
-        eclimd-default-workspace "~/Documents/workspace/"
+(setq
         help-at-pt-display-when-idle t
         help-at-pt-timer-delay 0.1
 )
-(add-hook 'java-mode-hook 'eclim-mode)
+
+
+(require 'sbt-mode)
+
+(defun java-mode-hook-func ()
+    (company-mode 1)
+    (help-at-pt-set-timer))
+
+(add-hook 'java-mode-hook 'java-mode-hook-func)
 #+END_SRC
 ** Yasnippet
    I keep revisiting this one. [[http://blog.binchen.org/?p%3D553][Bin Chen]] suggests binding completion
