@@ -113,6 +113,12 @@ to use the java integration we need eclipse
 
 (add-hook 'java-mode-hook 'java-mode-hook-func)
 #+END_SRC
+** go
+#+BEGIN_SRC emacs-lisp
+
+(require 'go-mode)
+
+#+END_SRC
 ** Yasnippet
    I keep revisiting this one. [[http://blog.binchen.org/?p%3D553][Bin Chen]] suggests binding completion
    to a different key combo than =TAB=, which may make sense. Oh, and
