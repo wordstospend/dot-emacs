@@ -41,7 +41,8 @@
 #+begin_src emacs-lisp
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("mlpa-stable" ."http://melpa-stable.milkbox.net/packages/")))
 #+end_src
 
 ** testing on ruby mode
@@ -114,9 +115,50 @@ to use the java integration we need eclipse
 (add-hook 'java-mode-hook 'java-mode-hook-func)
 #+END_SRC
 ** go
+in order to use autocomplete
+go get -u github.com/nsf/gocode
+
+go oracle
+https://docs.google.com/document/d/1SLk36YRjjMgKqe490mSRzOPYEDe0Y_WQNRv-EiFYUyw/view
+
 #+BEGIN_SRC emacs-lisp
 
 (require 'go-mode)
+(require 'go-guru)
+(defun my-go-mode-hook ()
+  ; Call Gofmt before saving and import
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  ; Customize compile command to run go build
+  ; Godef jump key binding
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-*") 'pop-tag-mark)
+  (local-set-key (kbd "M-p") 'compile)            ; Invoke compiler
+  (local-set-key (kbd "M-P") 'recompile)          ; Redo most recent compile cmd
+  (local-set-key (kbd "M-]") 'next-error)         ; Go to next error (or msg)
+  (local-set-key (kbd "M-[") 'previous-error)     ; Go to previous error or msg
+  ;; highlight identifiers
+  (go-guru-hl-identifier-mode)
+)
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+(defun auto-complete-for-go ()
+(auto-complete-mode 1))
+(add-hook 'go-mode-hook 'auto-complete-for-go)
+
+(with-eval-after-load 'go-mode
+   (require 'go-autocomplete))
+
+
+#+END_SRC
+** docker
+#+BEGIN_SRC emacs-lisp
+
+(require 'docker-compose-mode)
+
+#+END_SRC
+** protobuffer
+#+BEGIN_SRC emacs-lisp
+
+(require 'protobuf-mode)
 
 #+END_SRC
 ** Yasnippet
@@ -376,6 +418,7 @@ code stollen strait off auto save module page
 #+begin_src emacs-lisp
   (setq zmalltalker/default-theme 'zenburn)
   (setq zmalltalker/lighter-theme 'solarized-light)
+
   (defun zmalltalker/theme-lighter ()
     (interactive)
     (load-theme zmalltalker/lighter-theme t)
@@ -1139,6 +1182,14 @@ GET https://gitorious.org/gitorious/mainline.xml
 (helm-projectile-on)
 
 #+END_SRC
+** Terraform
+This is just a simple terraform hook
+I need too look up more on how to use this
+https://github.com/syohex/emacs-terraform-mode
+#+BEGIN_SRC emacs-lisp
+ (add-to-list 'auto-mode-alist '("\\.tf\\'" . terraform-mode))
+#+END_SRC
+
 ** expermental
 M-x httpd-start
 then enable the per buffer minor mode
