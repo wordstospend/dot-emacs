@@ -54,6 +54,8 @@ code blocks which can be tangled"
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(coffee-command "/opt/node/bin/node /opt/node/bin/coffee")
  '(coffee-tab-width 2)
  '(column-number-mode t)
@@ -65,6 +67,7 @@ code blocks which can be tangled"
  '(custom-safe-themes
    (quote
     ("1a1a45e7c59a010f05a73a628df26734319ae918c2bbe2231ac2656b04e6667d" "ba6d8b7d5e7a87eda72464b1f57039da08793d2f52f813485965b7183c183080" "f5b591870422cd28da334552aae915cdcae3edfcfedb6653a9f42ed84bbec69f" "6ee6f99dc6219b65f67e04149c79ea316ca4bcd769a9e904030d38908fd7ccf9" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "88bce56c65a570e04a01ef3908aac348448f0bb9a3922a3f595e555e8cf0705f" "36a309985a0f9ed1a0c3a69625802f87dee940767c9e200b89cdebdb737e5b29" "501caa208affa1145ccbb4b74b6cd66c3091e41c5bb66c677feda9def5eab19c" "72cc9ae08503b8e977801c6d6ec17043b55313cda34bcf0e6921f2f04cf2da56" default)))
+ '(fci-rule-color "#383838")
  '(go-guru-debug t)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(highlight-symbol-colors
@@ -86,6 +89,9 @@ code blocks which can be tangled"
  '(org-agenda-files (quote ("~/org/gtd.org")))
  '(org-babel-load-languages (quote ((emacs-lisp . t) (ruby . t))))
  '(org-confirm-babel-evaluate nil)
+ '(package-selected-packages
+   (quote
+    (nginx-mode tide typescript-mode color-theme-sanityinc-tomorrow terraform-mode switch-window scpaste rvm rpm-spec-mode restclient protobuf-mode org-bullets multiple-cursors magit impatient-mode helm-projectile go-guru go-autocomplete expand-region ensime docker-compose-mode ascii-art-to-unicode)))
  '(safe-local-variable-values
    (quote
     ((eval setq exec-path
@@ -150,7 +156,29 @@ code blocks which can be tangled"
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
  '(term-default-bg-color "#fdf6e3")
  '(term-default-fg-color "#657b83")
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(vc-annotate-background "#2b2b2b")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#bc8383")
+     (40 . "#cc9393")
+     (60 . "#dfaf8f")
+     (80 . "#d0bf8f")
+     (100 . "#e0cf9f")
+     (120 . "#f0dfaf")
+     (140 . "#5f7f5f")
+     (160 . "#7f9f7f")
+     (180 . "#8fb28f")
+     (200 . "#9fc59f")
+     (220 . "#afd8af")
+     (240 . "#bfebbf")
+     (260 . "#93e0e3")
+     (280 . "#6ca0a3")
+     (300 . "#7cb8bb")
+     (320 . "#8cd0d3")
+     (340 . "#94bff3")
+     (360 . "#dc8cc3"))))
+ '(vc-annotate-very-old-color "#dc8cc3"))
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
