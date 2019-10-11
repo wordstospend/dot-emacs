@@ -91,7 +91,7 @@ code blocks which can be tangled"
  '(org-confirm-babel-evaluate nil)
  '(package-selected-packages
    (quote
-    (nginx-mode tide typescript-mode color-theme-sanityinc-tomorrow terraform-mode switch-window scpaste rvm rpm-spec-mode restclient protobuf-mode org-bullets multiple-cursors magit impatient-mode helm-projectile go-guru go-autocomplete expand-region ensime docker-compose-mode ascii-art-to-unicode)))
+    (dash company-lsp lsp-ui lsp-mode nginx-mode tide typescript-mode color-theme-sanityinc-tomorrow terraform-mode switch-window scpaste rvm rpm-spec-mode restclient protobuf-mode org-bullets multiple-cursors magit impatient-mode helm-projectile expand-region ensime docker-compose-mode ascii-art-to-unicode)))
  '(safe-local-variable-values
    (quote
     ((eval setq exec-path
